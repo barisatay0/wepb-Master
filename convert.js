@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const heicConvert = require('heic-convert');
+const heif_Convert = require('heic-convert');
 const sharp = require('sharp');
 
 const app = express();
@@ -11,7 +11,7 @@ const upload = multer({ storage: storage });
 
 const convertImage = async (fileBuffer, mimeType) => {
     if (mimeType === 'image/heic' || mimeType === 'image/heif') {
-        return await heicConvert({
+        return await heif_Convert({
             buffer: fileBuffer,
             format: 'JPEG',
         });
