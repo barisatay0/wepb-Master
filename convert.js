@@ -1,17 +1,17 @@
 const express = require('express');
 const multer = require('multer');
-const heif_Convert = require('heic-convert');
+const heifConvert = require('heic-convert');
 const sharp = require('sharp');
 
 const app = express();
 const PORT = 3001;
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-const convertImage = async (fileBuffer, mimeType) => {
+const convertHeicToJpeg = async (fileBuffer, mimeType) => {
     if (mimeType === 'image/heic' || mimeType === 'image/heif') {
-        return await heif_Convert({
+        return await heifConvert({
             buffer: fileBuffer,
             format: 'JPEG',
         });
@@ -19,21 +19,25 @@ const convertImage = async (fileBuffer, mimeType) => {
     return fileBuffer;
 };
 
-app.post('/convert', upload.single('image'), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).send('No file uploaded.');
-        }
+const convertToWebp = async (jpegBuffer) => {
+    return await sharp(jpegBuffer).toFormat('webp').toBuffer();
+};
 
-        const jpegBuffer = await convertImage(req.file.buffer, req.file.mimetype);
-        const webpBuffer = await sharp(jpegBuffer).toFormat('webp').toBuffer();
+app.post('/convert', upload.single('image'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+
+    try {
+        const jpegBuffer = await convertHeicToJpeg(req.file.buffer, req.file.mimetype);
+        const webpBuffer = await convertToWebp(jpegBuffer);
 
         res.set('Content-Type', 'image/webp');
         res.set('Content-Disposition', 'attachment; filename=converted.webp');
-        res.send(webpBuffer);
+        return res.send(webpBuffer);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Error processing the image.');
+        console.error('Error processing the image:', error);
+        return res.status(500).send('Error processing the image.');
     }
 });
 
