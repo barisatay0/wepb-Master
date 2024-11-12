@@ -1,23 +1,30 @@
 const {convertHeicToJpeg} = require('../services/heicService');
 const {convertToWebp} = require('../services/imageProcessingService');
+const archiver = require('archiver');
 
-const convertImage = async (req, res) => {
-    if (!req.file) {
-        return res.status(400).send('No file uploaded.');
-    }
+const convertImages = async (req, res) => {
+    if (!req.files || req.files.length === 0) return res.status(400).send('No files uploaded.');
 
     try {
-        const jpegBuffer = await convertHeicToJpeg(req.file.buffer, req.file.mimetype);
+        const webpBuffers = await Promise.all(req.files.map(async (file, index) => {
+            const jpegBuffer = await convertHeicToJpeg(file.buffer, file.mimetype);
+            const webpBuffer = await convertToWebp(jpegBuffer);
+            return {buffer: webpBuffer, name: `converted_${index + 1}.webp`};
+        }));
 
-        const webpBuffer = await convertToWebp(jpegBuffer);
+        res.set('Content-Type', 'application/zip');
+        res.set('Content-Disposition', 'attachment; filename=converted_images.zip');
 
-        res.set('Content-Type', 'image/webp');
-        res.set('Content-Disposition', 'attachment; filename=converted.webp');
-        return res.send(webpBuffer);
+        const archive = archiver('zip', {zlib: {level: 9}});
+        archive.pipe(res);
+
+        webpBuffers.forEach(({buffer, name}) => archive.append(buffer, {name}));
+        archive.finalize();
+
     } catch (error) {
-        console.error('Error processing the image:', error);
-        return res.status(500).send('Error processing the image.');
+        console.error('Error processing images:', error);
+        res.status(500).send(`Error processing the images: ${error.message}`);
     }
 };
 
-module.exports = {convertImage};
+module.exports = {convertImages};
