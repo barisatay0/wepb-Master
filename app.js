@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const imageController = require('./controllers/imageController');
+const imageController = require('./controller/imageController');
 
 const app = express();
 const PORT = 3001;
