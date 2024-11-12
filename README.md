@@ -83,6 +83,3 @@ To run this project locally, ensure you have the following installed:
 - If no files are uploaded, the server responds with a `400` status and the message: `"No files uploaded."`
 - If there's an issue during the image processing, the server responds with a `500` status and an error message.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
