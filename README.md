@@ -65,7 +65,7 @@ To run this project locally, ensure you have the following installed:
 - **app.js**: Main application entry point, sets up the Express server and handles image uploads.
 - **controller/imageController.js**: Handles the logic for converting images and creating the zip file.
 - **service/imageProcessingService.js**: Contains the logic for converting images to WebP format using the `sharp` library.
-- **service/heicService.js**: Converts HEIC/HEIF images to JPEG format using the `heic-convert` library.
+- **service/heifService.js**: Converts HEIC/HEIF images to JPEG format using the `heic-convert` library.
 - **node_modules**: Contains all project dependencies.
 - **package.json**: Lists project metadata and dependencies.
 - **package-lock.json**: Lock file for dependencies.

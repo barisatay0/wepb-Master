@@ -1,4 +1,4 @@
-const {convertHeicToJpeg} = require('../service/heicService');
+const {convertHeifToJpeg} = require('../service/heifService');
 const {convertToWebp} = require('../service/imageProcessingService');
 const archiver = require('archiver');
 
@@ -7,7 +7,7 @@ const convertImages = async (req, res) => {
 
     try {
         const webpBuffers = await Promise.all(req.files.map(async (file, index) => {
-            const jpegBuffer = await convertHeicToJpeg(file.buffer, file.mimetype);
+            const jpegBuffer = await convertHeifToJpeg(file.buffer, file.mimetype);
             const webpBuffer = await convertToWebp(jpegBuffer);
             return {buffer: webpBuffer, name: `converted_${index + 1}.webp`};
         }));

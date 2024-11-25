@@ -1,6 +1,6 @@
 const heicConvert = require('heic-convert');
 
-const convertHeicToJpeg = async (fileBuffer, mimeType) => {
+const convertHeifToJpeg = async (fileBuffer, mimeType) => {
     if (['image/heic', 'image/heif'].includes(mimeType)) {
         return heicConvert({
             buffer: fileBuffer,
@@ -10,4 +10,4 @@ const convertHeicToJpeg = async (fileBuffer, mimeType) => {
     return fileBuffer;
 };
 
-module.exports = {convertHeicToJpeg};
+module.exports = {convertHeifToJpeg};
