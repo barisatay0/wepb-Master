@@ -19,7 +19,7 @@ const convertImages = async (req, res) => {
         archive.pipe(res);
 
         webpBuffers.forEach(({buffer, name}) => archive.append(buffer, {name}));
-        archive.finalize();
+        await archive.finalize();
 
     } catch (error) {
         console.error('Error processing images:', error);
