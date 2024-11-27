@@ -1,5 +1,5 @@
-const {convertHeifToJpeg} = require('../service/heifService');
-const {convertToWebp} = require('../service/imageProcessingService');
+const {convertHeifToJpeg} = require('../services/heifService');
+const {convertToWebp} = require('../services/imageProcessingService');
 const archiver = require('archiver');
 
 const convertImages = async (req, res) => {
