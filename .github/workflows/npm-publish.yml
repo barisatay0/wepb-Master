@@ -28,8 +28,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"  # GitHub Actions bot e-posta
-          git config --global user.name "github-actions[bot]"  # GitHub Actions bot ismi
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
       - run: npm version patch
       - run: npm publish
         env:
