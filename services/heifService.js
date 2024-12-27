@@ -10,4 +10,4 @@ const convertHeifToJpeg = async (fileBuffer, mimeType) => {
     return fileBuffer;
 };
 
-module.exports = {convertHeifToJpeg};
+module.exports = { convertHeifToJpeg };

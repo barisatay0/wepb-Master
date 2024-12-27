@@ -1,5 +1,5 @@
-const {convertHeifToJpeg} = require('../service/heifService');
-const {convertToWebp} = require('../service/imageProcessingService');
+const { convertHeifToJpeg } = require('../services/heifService');
+const { convertToWebp } = require('../services/imageProcessingService');
 const archiver = require('archiver');
 
 const convertImages = async (req, res) => {
@@ -9,22 +9,21 @@ const convertImages = async (req, res) => {
         const webpBuffers = await Promise.all(req.files.map(async (file, index) => {
             const jpegBuffer = await convertHeifToJpeg(file.buffer, file.mimetype);
             const webpBuffer = await convertToWebp(jpegBuffer);
-            return {buffer: webpBuffer, name: `converted_${index + 1}.webp`};
+            return { buffer: webpBuffer, name: `converted_${index + 1}.webp` };
         }));
 
         res.set('Content-Type', 'application/zip');
         res.set('Content-Disposition', 'attachment; filename=converted_images.zip');
 
-        const archive = archiver('zip', {zlib: {level: 9}});
+        const archive = archiver('zip', { zlib: { level: 9 } });
         archive.pipe(res);
 
-        webpBuffers.forEach(({buffer, name}) => archive.append(buffer, {name}));
-        archive.finalize();
-
+        webpBuffers.forEach(({ buffer, name }) => archive.append(buffer, { name }));
+        await archive.finalize();
     } catch (error) {
         console.error('Error processing images:', error);
         res.status(500).send(`Error processing the images: ${error.message}`);
     }
 };
 
-module.exports = {convertImages};
+module.exports = { convertImages };
