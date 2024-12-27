@@ -1,7 +1,5 @@
 const sharp = require('sharp');
 
-const convertToWebp = async (buffer) => {
-    return sharp(buffer).toFormat('webp').toBuffer();
-};
+const convertToWebp = (buffer) => sharp(buffer).webp().toBuffer();
 
-module.exports = {convertToWebp};
+module.exports = { convertToWebp };

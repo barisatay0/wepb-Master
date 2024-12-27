@@ -6,9 +6,9 @@ const app = express();
 const PORT = 3001;
 
 const storage = multer.memoryStorage();
-const upload = multer({storage});
+const upload = multer({ storage });
 
-app.post('/convert', upload.array('images', 100), imageController.convertImages);
+app.post('/convert', upload.array('images'), imageController.convertImages);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
