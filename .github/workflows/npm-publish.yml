@@ -29,8 +29,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Set git user name and email
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "barisatay0"
+          git config --global user.email "barisatay0@hotmail.com"
       - run: npm version patch
       - run: npm ci
       - run: npm publish
